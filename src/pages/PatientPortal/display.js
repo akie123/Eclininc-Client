@@ -3,25 +3,11 @@ import Book from "./booking"
 import Cancel from "./cancel"
 import Past from "./Past"
 import Profile from "./Profile"
-import Message from "./message"
-import Peer from "simple-peer"
-import Counter from "./counter"
-import io from "socket.io-client"
-import {useRef, useState,useEffect} from "react";
-import axios from "axios";
-import {SERVER_URL} from "../../constants";
-
-
 
 export default function Display(props){
 
-    const [ me, setMe ] = useState("")
-
-
-
-
     if(props.level === "Upcoming_Appointments"){
-        return ( <Upcoming />)
+        return <Upcoming/>
     }
     else if(props.level === "Info"){
         return <Profile/>
@@ -34,8 +20,5 @@ export default function Display(props){
     }
     else if(props.level === "Past_Appointment"){
         return <Past/>
-    }
-    else{
-        return <Message/>
     }
 }
