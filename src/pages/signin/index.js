@@ -1,46 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SERVER_URL } from "../../constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Index() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    const [state,setState] = useState({
-        number: "",
-        password: ""
-    })
-
-    const [error,setError] = useState({
+    const [state, setState] = useState({
         number: "",
         password: "",
-        login : ""
-    })
+    });
+
+    const [error, setError] = useState({
+        number: "",
+        password: "",
+        login: "",
+    });
 
     const handleInputChange = (e) => {
         setState({ ...state, [e.target.name]: e.target.value });
-    }
+    };
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        axios.post(`${SERVER_URL}/login`,state)
-            .then(resp => {
-                localStorage.setItem(
-                    "items",
-                    JSON.stringify({...resp.data})
-                )
-                if(resp.data.user === "patient")
-                    navigate("/patientportal");
-                else if(resp.data.user === "doctor")
-                    navigate("/doctorportal");
-                else
-                    navigate("/admin");
+        e.preventDefault();
+        axios
+            .post(`${SERVER_URL}/login`, state)
+            .then((resp) => {
+                localStorage.setItem("items", JSON.stringify({ ...resp.data }));
+                if (resp.data.user === "patient") navigate("/patientportal");
+                else if (resp.data.user === "doctor") navigate("/doctorportal");
+                else navigate("/admin");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
+    useEffect(() => {
+        const items = localStorage.getItem("items");
+        if (items) {
+            const {user} = JSON.parse(items)
+            if (user) {
+                if (user === "patient") navigate("/patientportal");
+                else if (user === "doctor") navigate("/doctorportal");
+                else navigate("/admin");
+            }
+        }
+    }, []);
 
     return (
         <>
@@ -51,10 +57,7 @@ export default function Index() {
                 <div className="container h-100">
                     <div className="row d-flex justify-content-center align-items-center h-100">
                         <div className="col-lg-12 col-xl-11">
-                            <div
-                                className="card text-black"
-                                style={{ borderRadius: "35x" }}
-                            >
+                            <div className="card text-black" style={{ borderRadius: "35x" }}>
                                 <div className="row">
                                     <div className="col-5 col-md-5" style={{ padding: "3%" }}>
                                         <div className="card card-body">
@@ -133,17 +136,11 @@ export default function Index() {
                                                     style={{ paddingTop: "9%" }}
                                                 >
                                                     {error.login && (
-                                                        <p
-                                                            className="text-danger"
-                                                            style={{ margin: "0" }}
-                                                        >
+                                                        <p className="text-danger" style={{ margin: "0" }}>
                                                             {error.login}
                                                         </p>
                                                     )}
-                                                    <button
-                                                        type="submit"
-                                                        className="btn btn-dark btn-lg"
-                                                    >
+                                                    <button type="submit" className="btn btn-dark btn-lg">
                                                         Signin
                                                     </button>
                                                 </div>
