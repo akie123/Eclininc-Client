@@ -23,9 +23,10 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import Swal from "sweetalert2";
 
-export default function Upcoming({Sid}) {
+export default function Upcoming() {
 
   const [data,setData] = useState([])
+  const [link,setLink] = useState("")
   const [name,setName] = useState("")
   const [remainingTime,setremainingTime] = useState(null)
   const [f1,setF1]= useState(1)
@@ -76,10 +77,12 @@ export default function Upcoming({Sid}) {
           },
         })
         .then((resp) => {
-          console.log(resp.data);
+
           setData(resp.data.upcoming)
+
           setremainingTime(timeDiff(resp.data.upcoming[0].time))
           setName(resp.data.name)
+          setLink(`http://localhost:3001/h/${resp.data.upcoming[0].idD}/${resp.data.upcoming[0].name}`)
 
         });
 
@@ -91,6 +94,9 @@ export default function Upcoming({Sid}) {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+
+    window.open(link, "_self")
 
   };
 

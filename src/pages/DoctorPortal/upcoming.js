@@ -21,7 +21,7 @@ import Counter from "./../PatientPortal/counter"
 import io from "socket.io-client"
 import Swal from "sweetalert2";
 import {userSchema} from "../../Validations/firstP";
-const socket = io.connect('http://localhost:2500')
+
 const minuteSeconds = 60;
 const hourSeconds = 3600;
 const daySeconds = 86400;
@@ -35,7 +35,7 @@ const renderTime = (dimension, time) => {
     );
 };
 
-export default function Upcoming({Sid}) {
+export default function Upcoming() {
 
     const [data,setData] = useState([])
     const [name,setName] = useState("")
@@ -43,6 +43,7 @@ export default function Upcoming({Sid}) {
     const [f1,setF1]= useState(1)
     const [f2,setF2]= useState(2)
     const [f3,setF3]= useState(3)
+    const [link,setLink] = useState("")
 
     function timeDiff(str) {
         let currentTime = new Date();
@@ -61,8 +62,7 @@ export default function Upcoming({Sid}) {
         let minutesIST = ISTTime.getMinutes();
         let hours = str.substring(0,2)
         let minutes = str.substring(3,5)
-        console.log(hours-hoursIST)
-        console.log(minutes-minutesIST)
+
         let num = hours-hoursIST
         num *= 60
         let num1 = minutes-minutesIST
@@ -73,7 +73,13 @@ export default function Upcoming({Sid}) {
     }
 
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
+
+        window.open(link, "_self")
+
+    };
 
 
     useEffect(() => {
@@ -90,6 +96,7 @@ export default function Upcoming({Sid}) {
                 setData(resp.data.upcoming)
                 setremainingTime(timeDiff(resp.data.upcoming[0].time))
                 setName(resp.data.name)
+                setLink(`http://localhost:3001/h/${resp.data.upcoming[0].idD}/${resp.data.upcoming[0].name}`)
 
             });
     },[])
@@ -137,7 +144,7 @@ export default function Upcoming({Sid}) {
                                         <span className="badge rounded-pill badge-success">scheduled</span>
                                     </div>
                                     <div className="d-flex pt-1">
-                                        <button type="button"  className="btn btn-outline-primary">Join Call</button>
+                                        <button type="button" onClick={handleSubmit} className="btn btn-outline-primary">Join Call</button>
                                         {/*<MDBBtn outline onClick={handleSubmit} className="me-1 flex-grow-1">Join Call</MDBBtn>*/}
 
                                     </div>
