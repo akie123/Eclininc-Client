@@ -33,7 +33,7 @@ export default function Doctor(){
      function helperfun() {
       const items = JSON.parse(localStorage.getItem('items'))
        axios
-         .get(`http://localhost:5000/doctors?email=${items.email}`)
+         .get(`${SERVER_URL}/doctors?email=${items.email}`)
          .then((res) => {
            setData(res.data[0]);
            setMsgs(res.data[0].messages)

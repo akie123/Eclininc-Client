@@ -187,7 +187,7 @@ export default function Index() {
             qualification:state.qualification
         },{ abortEarly: false }).then(async() => {
 
-            axios.post('http://localhost:5000/register/signD',state)
+            axios.post(`${SERVER_URL}/register/signD`,state)
                 .then((res) => {
                     console.log(res.data)
                     pageChange(4)
@@ -213,11 +213,11 @@ export default function Index() {
             number:state.number,
             check:state.check
         },{ abortEarly: false }).then(async() => {
-            axios.get(`http://localhost:5000/register/number/${state.number}`)
+            axios.get(`${SERVER_URL}/register/number/${state.number}`)
                 .then(response => {
 
                     if (response.data.check=="notfound") {
-                        axios.post("http://localhost:5000/verify/getcode", {
+                        axios.post(`${SERVER_URL}/verify/getcode`, {
                                 number: state.number,
                                 channel: 'sms'
                             }

@@ -107,10 +107,10 @@ export default function Index() {
             state:state.state,
             gender:state.gender
         },{ abortEarly: false }).then(async() => {
-            axios.get(`http://localhost:5000/register/email/${state.email}`)
+            axios.get(`${SERVER_URL}/register/email/${state.email}`)
                 .then(response => {
                     if (response.data.check=="notfound") {
-                        axios.post('http://localhost:5000/register/signP',state)
+                        axios.post(`${SERVER_URL}/register/signP`,state)
                             .then((res) => {
                                 console.log(res.data)
                                 pageChange(3)
@@ -142,7 +142,7 @@ export default function Index() {
     };
     const handleSubmit1 = async (event) => {
         event.preventDefault();
-        axios.post("http://localhost:5000/verify/verifycode", {
+        axios.post(`${SERVER_URL}/verify/verifycode`, {
                 number: state.number,
                 code:state.otp
             }
@@ -183,11 +183,11 @@ export default function Index() {
             check:state.check
         },{ abortEarly: false }).then(async() => {
 
-            axios.get(`http://localhost:5000/register/number/${state.number}`)
+            axios.get(`${SERVER_URL}/register/number/${state.number}`)
                 .then(response => {
 
                     if (response.data.check=="notfound") {
-                        axios.post("http://localhost:5000/verify/getcode", {
+                        axios.post(`${SERVER_URL}/verify/getcode`, {
                                 number: state.number,
                                 channel: 'sms'
                             }

@@ -1,13 +1,7 @@
 import axios from "axios";
 import { React, useEffect, useState } from "react";
 import { SERVER_URL } from "../../constants";
-import file from './docc.jfif';
-// const handleDownloadPNG = () => {
-//   const link = document.createElement('a');
-//   link.href = file;
-//   link.download = 'my-image.png';
-//   link.click();
-// };
+
 export default function TableTwo() {
   
   const handleVerifyClick = (id) => {

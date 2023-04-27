@@ -6,6 +6,7 @@ import axios from "axios";
 import ErrPage from "../404page";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { SERVER_URL } from "../../constants";
 
 export const PatientContext = React.createContext()
 
@@ -36,7 +37,7 @@ function Patient() {
   function helperfun() {
     const items = JSON.parse(localStorage.getItem('items'))
     axios
-      .get(`http://localhost:5000/patients?email=${items.email}`)
+      .get(`${SERVER_URL}/patients?email=${items.email}`)
       .then((res) => {
         setData(res.data[0]);
         setMsgs(res.data[0].messages)
@@ -99,7 +100,7 @@ function Patient() {
         setUpcoming(final_list);
         setPast(final_list_1);
       })
-    axios.get("http://localhost:5000/doctors").then((resp) => {
+    axios.get(`${SERVER_URL}/doctors`).then((resp) => {
       setDData(resp.data)
     })
   }
