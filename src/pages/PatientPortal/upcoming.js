@@ -174,7 +174,7 @@ export default function Upcoming() {
               <th scope="col">Doctor's Name</th>
               <th scope="col">Specialist</th>
               <th scope="col">Time</th>
-              <th scope="col">Status</th>
+
             </tr>
           </MDBTableHead>
           <MDBTableBody>
@@ -209,19 +209,7 @@ export default function Upcoming() {
                         {appointment.time}
                       </p>
                     </td>
-                    <td>
-                      <button
-                          style={{
-                            outline: "none",
-                            border: "0px",
-                            padding: "0.6rem",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                          }}
-                      >
-                        Consult now
-                      </button>
-                    </td>
+
                   </tr>
               );
             })}
