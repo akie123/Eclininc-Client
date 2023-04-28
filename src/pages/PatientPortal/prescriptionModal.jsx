@@ -131,19 +131,19 @@ const PrescriptionModal = (props) => {
 
             <style jsx>
                 {`
-                  .pres-head {
-                    display: flex;
-                    justify-content: space-between;
-                  }
+          .pres-head {
+            display: flex;
+            justify-content: space-between;
+          }
 
-                  .prescription {
-                    padding: 2rem 2rem;
-                  }
+          .prescription {
+            padding: 2rem 2rem;
+          }
 
-                  .pres-body {
-                    margin-top: 2rem;
-                  }
-                `}
+          .pres-body {
+            margin-top: 2rem;
+          }
+        `}
             </style>
         </>
     );

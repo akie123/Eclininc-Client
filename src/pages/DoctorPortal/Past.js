@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
-import {
-    MDBBadge,
-    MDBTable,
-    MDBTableHead,
-    MDBTableBody,
-} from "mdb-react-ui-kit";
+import { MDBTable, MDBTableHead, MDBTableBody } from "mdb-react-ui-kit";
 import axios from "axios";
+import PrescriptionModal from "./prescriptionModal";
+import AddPrescription from "./addPrescriptionModal";
 import { SERVER_URL } from "../../constants";
 
-export default function Past(){
+export default function Past() {
+    const [past, setPast] = useState([]);
 
-    const [past,setPast] = useState([])
+    const helperfun = () => {
+        const { id, jwtToken } = JSON.parse(localStorage.getItem("items"));
+        axios
+            .get(`${SERVER_URL}/doctor/${id}/past`, {
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`,
+                },
+            })
+            .then((resp) => {
+                setPast(resp.data.past);
+                console.log(resp.data.past);
+            });
+    };
 
     useEffect(() => {
-        const { id, jwtToken } = JSON.parse(localStorage.getItem("items"));
-        axios.get(`${SERVER_URL}/doctor/${id}/past`, {
-            headers: {
-                Authorization: `Bearer ${jwtToken}`,
-            },
-        }).then(resp => {
-            setPast(resp.data.past)
-        })
-    },[])
+        helperfun()
+    }, []);
 
     const fun = (str) => {
         let temp = new Date(str);
@@ -32,14 +35,16 @@ export default function Past(){
 
     return (
         <div style={{ width: "90%" }}>
-            <h1 style={{ marginTop: "30px", marginBottom: "40px" }}>Past Appointments</h1>
+            <h1 style={{ marginTop: "30px", marginBottom: "40px" }}>
+                Past Appointments
+            </h1>
             <MDBTable align="middle" style={{ position: "" }}>
                 <MDBTableHead>
                     <tr>
                         <th scope="col">Patient's Name</th>
                         <th scope="col">Date</th>
                         <th scope="col">Time</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Add / View Prescription</th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
@@ -73,15 +78,18 @@ export default function Past(){
                                     </p>
                                 </td>
                                 <td>
-                                    <MDBBadge
-                                        color="secondary"
-                                        pill
-                                        style={{ width: "40%", height: "18px" }}
-                                    >
-                       <span style={{ color: "white" }}>
-                         past
-                       </span>
-                                    </MDBBadge>
+                                    {appointment.prescription === null ? (
+                                        <>
+                                            <AddPrescription id={appointment.id} helperfun={helperfun}/>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <PrescriptionModal
+                                                id={appointment.id}
+                                                prescription={appointment.prescription}
+                                            />
+                                        </>
+                                    )}
                                 </td>
                             </tr>
                         );
