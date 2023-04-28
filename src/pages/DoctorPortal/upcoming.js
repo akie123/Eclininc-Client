@@ -118,7 +118,7 @@ export default function Upcoming() {
 
 
 
-            {data!=[] && <MDBCard>
+            {data && <MDBCard>
                 <MDBCardHeader>Upcoming Appointment</MDBCardHeader>
                 <MDBCardBody>
 
@@ -168,7 +168,7 @@ export default function Upcoming() {
 
             <br/>
             <br/>
-            {data!=[]&&<MDBTable align="middle">
+            <MDBTable align="middle">
                 <MDBTableHead>
                     <tr>
                         <th scope="col">Patient's Name</th>
@@ -203,7 +203,7 @@ export default function Upcoming() {
                         );
                     })}
                 </MDBTableBody>
-            </MDBTable>}
+            </MDBTable>
         </div>
     );
 }
