@@ -8,7 +8,7 @@ import {
     MDBTableBody,
 } from "mdb-react-ui-kit";
 import PrescriptionModal from "./prescriptionModal";
-
+import Rating from "react-rating"
 
 export default function Past(){
 
@@ -45,6 +45,7 @@ export default function Past(){
                         <th scope="col">Specialist</th>
                         <th scope="col">Date</th>
                         <th scope="col">Time</th>
+                        <th scope="col">Rate</th>
                         <th scope="col">Prescription</th>
                     </tr>
                 </MDBTableHead>
@@ -85,6 +86,9 @@ export default function Past(){
                                     >
                                         {appointment.time}
                                     </p>
+                                </td>
+                                <td>
+                                    <Rating/>
                                 </td>
                                 <td>
                                     <>
