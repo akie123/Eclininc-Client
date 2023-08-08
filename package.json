@@ -52,8 +52,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "serve-json": "json-server -p 5000 -w db.json"
+    "eject": "react-scripts eject"
+
   },
   "eslintConfig": {
     "extends": [
