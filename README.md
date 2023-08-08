@@ -22,21 +22,6 @@ includes services such as registering and editing users, adding and editing doct
 appointments, and adding and deleting prescriptions and reviews.
 Overall, EClinic is designed to provide a convenient and efficient way for patients to book appointments and
 receive medical care from qualified doctors in a simple and secure online environment.
-## Working
-Open your favorite Terminal and run these commands.
-
-Install All Dependecies:
-```sh
-npm init install
-```
-
-start the react app:
-
-```sh
-npm start
-```
-
-Run the server(Json Server for mock backend):
 
 ```sh
 npm run serve-json
