@@ -8,3 +8,5 @@ In addition to its patient-facing features, Project eClinic also provides tools 
 
 Overall, Project eClinic aims to improve access to healthcare and make it more convenient for patients to find and connect with healthcare providers.
 Tech Stack: Node, Express, MongoDb, Multer,React,Morgan,Socket.io 
+
+Backend Repo - https://github.com/akie123/Eclinic-server
