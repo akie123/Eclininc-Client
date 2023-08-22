@@ -41,6 +41,7 @@ const Book = () => {
                 },
             })
             .then((resp) => {
+
                 setDoctors(resp.data);
                 setOrgDoctors(resp.data);
             });
@@ -72,7 +73,7 @@ const Book = () => {
             return sort[key] !== "default";
         });
         if (sortAttr !== undefined) {
-            console.log(sortAttr)
+
             let temp_arr = [...doctors];
             if (sort[sortAttr] === "asc")
                 temp_arr.sort((doc1, doc2) =>
@@ -723,49 +724,6 @@ const Book = () => {
                 </div>
             )}
 
-            {/*    <div className="container-fluid" style={{paddingLeft:"0"}}>*/}
-            {/*        {doctors.map((item,indx) => (*/}
-            {/*            <div className="border border-secondary"*/}
-
-            {/*                key={indx}*/}
-            {/*                id={item.id}*/}
-            {/*            >*/}
-            {/*                <div className="row" style={{ width: "100%", margin:"2%" }}>*/}
-            {/*                    <div className="col-3">*/}
-            {/*                        <div className="row"> <img*/}
-            {/*                            id="im"*/}
-            {/*                            style={{ width: "130px" }}*/}
-            {/*                            src={*/}
-            {/*                                item.profilePic  }*/}
-            {/*                        /></div>*/}
-            {/*                        /!*<div className="row" style={{textAlign:'center',padding:"5%"}}>*!/*/}
-            {/*                        /!*    <h2 style={{fontFamily: "Delicious Handrawn, cursive"}}>{item.name}</h2>*!/*/}
-            {/*                        /!*</div>*!/*/}
-
-            {/*                    </div>*/}
-            {/*                    <div*/}
-            {/*                        className="col-4 container-fluid"*/}
-            {/*                        style={{*/}
-            {/*                            padding: "10px",*/}
-            {/*                            textAlign: "left",*/}
-            {/*                            lineHeight: "30px",*/}
-            {/*                        }}*/}
-            {/*                    >*/}
-            {/*                        <h5 style={{ paddingRight: "10px" }}>{item.name}</h5>*/}
-            {/*                        <h6>*/}
-            {/*                            {item.qualification}*/}
-            {/*                        </h6>*/}
-            {/*                        <h6>*/}
-            {/*                            {item.spec}*/}
-            {/*                        </h6>*/}
-            {/*                        <span>₹ {item.fees}/- per session </span>*/}
-            {/*                    </div>*/}
-            {/*                    {item ? <Modal slots={item.appointment} doctor_id={item._id} /> : <></>}*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        ))}*/}
-            {/*    </div>*/}
-            {/*</div>*/}
         </div>
     );
 };

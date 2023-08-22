@@ -6,41 +6,11 @@ import { SERVER_URL } from "../../constants";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-// const Slots = {
-//   26: [
-//     "7:00 AM",
-//     "8:00 AM",
-//     "9:00 AM",
-//     "10:00 AM",
-//     "11:00 AM",
-//     "12:00 AM",
-//     "1:00 PM",
-//   ],
-//   27: [
-//     "7:00 AM",
-//     "8:00 AM",
-//     "9:00 AM",
-//     "10:00 AM",
-//     "11:00 AM",
-//     "12:00 AM",
-//     "1:00 PM",
-//   ],
-//   28: [
-//     "7:00 AM",
-//     "8:00 AM",
-//     "9:00 AM",
-//     "10:00 AM",
-//     "11:00 AM",
-//     "12:00 AM",
-//     "1:00 PM",
-//   ],
-// };
 
 const Modal = (props) => {
     const [date, setDate] = useState(new Date());
     const Slots = props.slots
     const [Slot, setSlot] = useState();
-    const maxDate = new Date();
     const bookSlot = () => {
         const { id, jwtToken } = JSON.parse(localStorage.getItem("items"));
         axios.post(
@@ -72,6 +42,8 @@ const Modal = (props) => {
         setSlot("");
     }, [date]);
     return (
+
+        console.log(Slots),
         <>
             <div
                 className="modal fade"
@@ -126,6 +98,7 @@ const Modal = (props) => {
                                     }}
                                 >
                                     {Slots.map((slot) => {
+
                                         return (
                                             <button
                                                 disabled={!slot.avb ? true : false}
