@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useContext, useRef, useState, React, useEffect } from "react";
-import { UserContext } from "../../App";
+import { useState,  useEffect } from "react";
 import Swal from "sweetalert2";
 import { SERVER_URL } from "../../constants";
 
@@ -45,6 +44,7 @@ export default function Profile() {
         Authorization: `Bearer ${jwtToken}`,
       },
     }).then(resp => {
+
       setState({
         name: resp.data.name,
         email: resp.data.email,
@@ -53,6 +53,7 @@ export default function Profile() {
         city: resp.data.city,
         state: resp.data.state,
         qualification: resp.data.qualification,
+        fees: resp.data.fees
       });
       setProfilePic({
         profilePic: resp.data.profilePic
