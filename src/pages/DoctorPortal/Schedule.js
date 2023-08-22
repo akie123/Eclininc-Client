@@ -1,7 +1,6 @@
 import {useContext, useEffect, useState} from "react";
 import {SERVER_URL} from "../../constants"
 import {
-  MDBBadge,
   MDBTable,
   MDBTableHead,
   MDBTableBody,
@@ -33,8 +32,13 @@ export default function Schedule(){
 
         const { id, jwtToken } = JSON.parse(localStorage.getItem("items"));
       if(avb === false){
-
           for (let i = 0; i < data.length; i++) {
+              const givenDateString = data[i].time;
+              const givenDate = new Date(givenDateString);
+              const currentDate = new Date();
+              if (givenDate <= currentDate) {
+                  data[i].patientId = ""
+              }
               if (data[i].time == time) {
                   if(data[i].patientId!="")
                   {
@@ -64,11 +68,16 @@ export default function Schedule(){
                   })
                   break;
               }
-          }
-      }
+          }}
       else{
           for (let i = 0; i < data.length; i++) {
               if (data[i].time == time) {
+                  const givenDateString = data[i].time;
+                  const givenDate = new Date(givenDateString);
+                  const currentDate = new Date();
+                  if (givenDate <= currentDate) {
+                      data[i].patientId = ""
+                  }
                   if(data[i].patientId!="")
                   {
                       Swal.fire({

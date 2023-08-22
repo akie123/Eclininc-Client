@@ -1,7 +1,6 @@
-
-import { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import NoUpcomingAppointments from './noAppointment'
 import { SERVER_URL } from "../../constants";
 import {
     MDBTable,
@@ -11,79 +10,46 @@ import {
     MDBCardHeader,
     MDBCardBody,
     MDBCardTitle,
-    MDBCardText,
-    MDBBtn,
     MDBCardImage,
-    MDBTypography
+    MDBTypography, MDBSpinner
 } from "mdb-react-ui-kit";
-import Peer from "simple-peer"
+
 import Counter from "./../PatientPortal/counter"
-import io from "socket.io-client"
-import Swal from "sweetalert2";
-import {userSchema} from "../../Validations/firstP";
 
-const minuteSeconds = 60;
-const hourSeconds = 3600;
-const daySeconds = 86400;
-
-const renderTime = (dimension, time) => {
-    return (
-        <div className="time-wrapper">
-            <div className="time">{time}</div>
-            <div>{dimension}</div>
-        </div>
-    );
-};
-
+// This is the Upcoming component
 export default function Upcoming() {
 
-    const [data,setData] = useState([])
-    const [name,setName] = useState("")
-    const [remainingTime,setremainingTime] = useState(null)
-    const [f1,setF1]= useState(1)
-    const [f2,setF2]= useState(2)
-    const [f3,setF3]= useState(3)
-    const [link,setLink] = useState("")
+    const [data, setData] = useState([]);
 
+    const [remainingTime, setRemainingTime] = useState(null);
+    const [link, setLink] = useState("");
+    const [loading, setLoading] = useState(true); // State to track loading status
+
+    // Function to calculate time difference
     function timeDiff(str) {
         let currentTime = new Date();
-
         let currentOffset = currentTime.getTimezoneOffset();
-
         let ISTOffset = 330; // IST offset UTC +5:30
-
         let ISTTime = new Date(
             currentTime.getTime() + (ISTOffset + currentOffset) * 60000
         );
-
-
-
         let hoursIST = ISTTime.getHours();
         let minutesIST = ISTTime.getMinutes();
-        let hours = str.substring(0,2)
-        let minutes = str.substring(3,5)
-
-        let num = hours-hoursIST
-        num *= 60
-        let num1 = minutes-minutesIST
-        return (num+num1)*60
-
-
-
+        let hours = str.substring(0, 2);
+        let minutes = str.substring(3, 5);
+        let num = hours - hoursIST;
+        num *= 60;
+        let num1 = minutes - minutesIST;
+        return (num + num1) * 60;
     }
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-
-        window.open(link, "_self")
-
+        window.open(link, "_self");
     };
 
-
+    // useEffect to fetch data
     useEffect(() => {
-
         const { id, jwtToken } = JSON.parse(localStorage.getItem("items"));
         axios
             .get(`${SERVER_URL}/doctor/${id}/upcoming`, {
@@ -92,118 +58,110 @@ export default function Upcoming() {
                 },
             })
             .then((resp) => {
-
-                setData(resp.data.upcoming)
-                setremainingTime(timeDiff(resp.data.upcoming[0].time))
-                setName(resp.data.name)
-                setLink(`https://eclinic-web.onrender.com/h/${resp.data.upcoming[0].idD}/${resp.data.upcoming[0].name}`)
-
+                setData(resp.data.upcoming);
+                setRemainingTime(timeDiff(resp.data.upcoming[0].time));
+                setLoading(false);
+                setLink(`https://eclinic-web.onrender.com/h/${resp.data.upcoming[0].idD}/${resp.data.upcoming[0].name}`);
             });
-    },[])
-
-    const timerProps = {
-        isPlaying: true,
-        size: 120,
-        strokeWidth: 6
-    };
-
-
+    }, []);
 
     return (
         <div style={{ width: "90%" }}>
-            <h2 style={{marginBottom : "50px",marginTop : "40px" }}>
-                Hey <span style={{ color: "#655D8A" }}>{name}</span> ,Welcome
-                Back!
+            <h2 style={{ marginBottom: "50px", marginTop: "40px" }}>
+                Welcome Back!
             </h2>
+            {/* Show NoUpcomingAppointments component if no data */}
+            {loading ? ( // Display loading spinner while loading
+                <MDBSpinner role="status" className="mx-auto mt-5" style={{ display: "block" }} />
+            ) : data.length === 0 ? (
+                <NoUpcomingAppointments />
+            ) : (
+                <MDBCard>
+                    <MDBCardHeader>Upcoming Appointment</MDBCardHeader>
+                    <MDBCardBody>
+                        <div className="row">
+                            <div className="col-5">
 
-
-
-            {data && <MDBCard>
-                <MDBCardHeader>Upcoming Appointment</MDBCardHeader>
-                <MDBCardBody>
-
-
-                    <div className="row">
-                        <div className="col-5">
-                            {/*<MDBCardTitle>Dr.{data[0].name} ({data[0].spec}) </MDBCardTitle>*/}
-
-
-                            { data.length> 0 && <div className="d-flex text-black">
-                                <div className="flex-shrink-0" style={{paddingRight:"4%"}}>
-                                    <MDBCardImage
-                                        style={{ width: '180px', borderRadius: '10px' }}
-                                        src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp'
-                                        alt='Generic placeholder image'
-                                        fluid />
-                                </div>
-                                <div className="flex-grow-1 ms-3">
-                                    <MDBCardTitle>{data[0].name}({data[0].gender})  </MDBCardTitle>
-
-                                    <div className="d-flex justify-content-start rounded-3  mb-2">
-
-                                        <span className="badge rounded-pill badge-success">scheduled</span>
+                                    <div className="d-flex text-black">
+                                        <div className="flex-shrink-0" style={{ paddingRight: "10%"  }}>
+                                            <MDBCardImage
+                                                style={{ width: '180px', borderRadius: '10px' }}
+                                                src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp'
+                                                alt='Generic placeholder image'
+                                                fluid
+                                            />
+                                        </div>
+                                        <div className="flex-grow-1 ms-3" style={{paddingTop:"5%"}}>
+                                            <MDBCardTitle>{data[0].name}({data[0].gender}) </MDBCardTitle>
+                                            <div className="d-flex justify-content-start rounded-3  mb-2">
+                                                <span className="badge rounded-pill badge-success">scheduled</span>
+                                            </div>
+                                            <div className="d-flex pt-1">
+                                                <button type="button" onClick={handleSubmit} className="btn btn-outline-primary">Join Call</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="d-flex pt-1">
-                                        <button type="button" onClick={handleSubmit} className="btn btn-outline-primary">Join Call</button>
-                                        {/*<MDBBtn outline onClick={handleSubmit} className="me-1 flex-grow-1">Join Call</MDBBtn>*/}
 
-                                    </div>
+                            </div>
+                            <div className="col-6">
+                                <div style={{ textAlign: 'center', padding: "2%" }}>
+                                    <MDBTypography tag='div' className='display-5 pb-3 mb-3 border-bottom'>
+                                        Your appointment in
+                                    </MDBTypography>
                                 </div>
-                            </div>}
+                                {/* Conditionally render Counter component */}
+                                {remainingTime != null && (
+                                    <Counter remainingTime={remainingTime}  />
+                                )}
+                            </div>
                         </div>
-                        {<div className="col-6">
-                            <div  style={{textAlign:'center',padding:"2%"}}><MDBTypography tag='div' className='display-5 pb-3 mb-3 border-bottom'>
-                                Your appointment in
-                            </MDBTypography></div>
-                            {remainingTime!=null && < Counter remainingTime={remainingTime} setF1={setF1} setF2={setF2} setF3={setF3}/>}
-                        </div>}
-
-
-
-                    </div>
-
-
-                </MDBCardBody>
-            </MDBCard> }
-
-            <br/>
-            <br/>
-            <MDBTable align="middle">
-                <MDBTableHead>
-                    <tr>
-                        <th scope="col">Patient's Name</th>
-                        <th scope="col">Time</th>
-
-                    </tr>
-                </MDBTableHead>
-                <MDBTableBody>
-                    {data?.map((appointment) => {
-                        return (
-                            <tr key={appointment.id}>
-                                <td>
-                                    <div className="ms-3">
+                    </MDBCardBody>
+                </MDBCard>
+            )}
+            <br />
+            <br />
+            {data.length !== 0 && (
+                <MDBTable align="middle">
+                    <MDBTableHead>
+                        <tr>
+                            <th scope="col">Patient's Name</th>
+                            <th scope="col">Time</th>
+                        </tr>
+                    </MDBTableHead>
+                    <MDBTableBody>
+                        {data?.map((appointment) => {
+                            return (
+                                <tr key={appointment.id}>
+                                    <td>
+                                        <div className="ms-3">
+                                            <p
+                                                className="fw-bold mb-1"
+                                                style={{
+                                                    fontWeight: "600",
+                                                    color: "black",
+                                                }}
+                                            >
+                                                {appointment.name}
+                                            </p>
+                                        </div>
+                                    </td>
+                                    <td>
                                         <p
-                                            className="fw-bold mb-1"
-                                            style={{ fontWeight: "600", color: "black" }}
+                                            className="fw-formal mb-1"
+                                            style={{
+                                                fontWeight: "450",
+                                                color: "black",
+                                            }}
                                         >
-                                            {appointment.name}
+                                            {appointment.time}
                                         </p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p
-                                        className="fw-formal mb-1"
-                                        style={{ fontWeight: "450", color: "black" }}
-                                    >
-                                        {appointment.time}
-                                    </p>
-                                </td>
-
-                            </tr>
-                        );
-                    })}
-                </MDBTableBody>
-            </MDBTable>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </MDBTableBody>
+                </MDBTable>
+            )}
         </div>
     );
 }
