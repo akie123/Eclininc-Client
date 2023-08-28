@@ -59,6 +59,7 @@ export default function Upcoming() {
             })
             .then((resp) => {
                 setData(resp.data.upcoming);
+                console.log(resp.data.upcoming);
                 setRemainingTime(timeDiff(resp.data.upcoming[0].time));
                 setLoading(false);
                 setLink(`https://eclinic-web.onrender.com/h/${resp.data.upcoming[0].idD}/${resp.data.upcoming[0].name}`);
@@ -66,17 +67,19 @@ export default function Upcoming() {
     }, []);
 
     return (
+        <>
+        { loading && <MDBSpinner grow color="success" />}
         <div style={{ width: "90%" }}>
             <h2 style={{ marginBottom: "50px", marginTop: "40px" }}>
                 Welcome Back!
             </h2>
+
             {/* Show NoUpcomingAppointments component if no data */}
-            {loading ? ( // Display loading spinner while loading
-                <MDBSpinner role="status" className="mx-auto mt-5" style={{ display: "block" }} />
-            ) : data.length === 0 ? (
-                <NoUpcomingAppointments />
-            ) : (
+            {data?.length == 0 && <NoUpcomingAppointments />}
+            {data?.length!=0 && (
+
                 <MDBCard>
+
                     <MDBCardHeader>Upcoming Appointment</MDBCardHeader>
                     <MDBCardBody>
                         <div className="row">
@@ -163,5 +166,6 @@ export default function Upcoming() {
                 </MDBTable>
             )}
         </div>
+        </>
     );
 }

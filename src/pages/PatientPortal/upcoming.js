@@ -4,7 +4,6 @@ import NoUpcomingAppointments from "../DoctorPortal/noAppointment";
 import { SERVER_URL } from "../../constants";
 import {
   MDBTable,
-    MDBSpinner,
   MDBTableHead,
   MDBTableBody,
   MDBCard,
@@ -12,9 +11,8 @@ import {
   MDBCardBody,
   MDBCardTitle,
   MDBCardText,
-  MDBBtn,
   MDBCardImage,
-  MDBTypography
+  MDBTypography, MDBSpinner
 } from "mdb-react-ui-kit";
 
 import Counter from "./counter";
@@ -73,16 +71,16 @@ export default function Upcoming() {
   };
 
   return (
+      <>
+        {/* Show loading spinner if data is not fetched */}
+        { loading && <MDBSpinner grow color="success" />}
       <div style={{ width: "90%" }}>
-        <h1 style={{ marginBottom: "50px", marginTop: "40px" }}>
-          Hey <span style={{ color: "#655D8A" }}>{name}</span>, Welcome Back!
-        </h1>
+        <h2 style={{ marginBottom: "50px", marginTop: "40px" }}>
+          Welcome Back!
+        </h2>
         {/* Show NoUpcomingAppointments component if no data */}
-        {loading ? ( // Display loading spinner while loading
-            <MDBSpinner role="status" className="mx-auto mt-5" style={{ display: "block" }} />
-        ) : data.length === 0 ? (
-            <NoUpcomingAppointments />
-        ) : (
+        {data?.length == 0 && <NoUpcomingAppointments />}
+        {data?.length!=0 &&(
             <MDBCard>
               <MDBCardHeader>Upcoming Appointment</MDBCardHeader>
               <MDBCardBody>
@@ -128,7 +126,7 @@ export default function Upcoming() {
         )}
         <br />
         <br />
-        <MDBTable align="middle">
+        {data.length !== 0 && <MDBTable align="middle">
           <MDBTableHead>
             <tr>
               <th scope="col">Doctor's Name</th>
@@ -144,20 +142,20 @@ export default function Upcoming() {
                     {/* Display doctor's name, specialization, and appointment time */}
                     <td>
                       <div className="ms-3">
-                        <p className="fw-bold mb-1" style={{ fontWeight: "600", color: "black" }}>
+                        <p className="fw-bold mb-1" style={{fontWeight: "600", color: "black"}}>
                           Dr.{appointment.name}
                         </p>
                       </div>
                     </td>
                     <td>
                       <div className="ms-3">
-                        <p className="fw-bold mb-1" style={{ fontWeight: "600", color: "black" }}>
+                        <p className="fw-bold mb-1" style={{fontWeight: "600", color: "black"}}>
                           {appointment.spec}
                         </p>
                       </div>
                     </td>
                     <td>
-                      <p className="fw-formal mb-1" style={{ fontWeight: "450", color: "black" }}>
+                      <p className="fw-formal mb-1" style={{fontWeight: "450", color: "black"}}>
                         {appointment.time}
                       </p>
                     </td>
@@ -166,6 +164,8 @@ export default function Upcoming() {
             })}
           </MDBTableBody>
         </MDBTable>
+        }
       </div>
+      </>
   );
 }
