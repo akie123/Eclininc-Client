@@ -58,8 +58,13 @@ export default function Upcoming() {
                 },
             })
             .then((resp) => {
+                resp.data.upcoming.sort((a, b) => {
+                    const timeA = a.time.split('-')[0]; // Extract the start time
+                    const timeB = b.time.split('-')[0];
+                    // Compare the start times as strings (lexicographically)
+                    return timeA.localeCompare(timeB);
+                });
                 setData(resp.data.upcoming);
-                console.log(resp.data.upcoming);
                 setRemainingTime(timeDiff(resp.data.upcoming[0].time));
                 setLoading(false);
                 setLink(`https://eclinic-web.onrender.com/h/${resp.data.upcoming[0].idD}/${resp.data.upcoming[0].name}`);
