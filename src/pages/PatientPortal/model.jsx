@@ -43,7 +43,7 @@ const Modal = (props) => {
     }, [date]);
     return (
 
-        console.log(Slots),
+
         <>
             <div
                 className="modal fade"

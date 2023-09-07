@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { PatientContext } from ".";
+import { useEffect, useState } from "react";
+
 import Modal from "./model";
-import Swal from "sweetalert2";
+
 import {
     MDBCard,
     MDBCardBody,
@@ -13,12 +13,7 @@ import {
     MDBBtn,
     MDBTypography,
 } from "mdb-react-ui-kit";
-import {
-    MDBDropdown,
-    MDBDropdownMenu,
-    MDBDropdownToggle,
-    MDBDropdownItem,
-} from "mdb-react-ui-kit";
+
 import { SERVER_URL } from "../../constants";
 
 const Book = () => {
@@ -41,6 +36,25 @@ const Book = () => {
                 },
             })
             .then((resp) => {
+                let currentDate = new Date();
+
+                resp.data.forEach(doctor => {
+                    doctor.appointment.forEach(appointment1 => {
+                        // Parse the appointment date and time
+                        const timeRange = appointment1.time.split('-');
+                        const lastTime = timeRange[1].trim();
+                        const [hours, minutes] = lastTime.split(':');
+
+                        // Set the date to the appointment date and time
+                        const appointmentDate = new Date(appointment1.date);
+                        appointmentDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+                        // Compare with the current date and time
+                        if (appointmentDate < currentDate) {
+                            appointment1.avb = true;
+                        }
+                    });
+                });
 
                 setDoctors(resp.data);
                 setOrgDoctors(resp.data);
