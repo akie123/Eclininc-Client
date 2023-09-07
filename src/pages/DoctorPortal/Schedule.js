@@ -33,10 +33,16 @@ export default function Schedule(){
         const { id, jwtToken } = JSON.parse(localStorage.getItem("items"));
       if(avb === false){
           for (let i = 0; i < data.length; i++) {
-              const givenDateString = data[i].time;
-              const givenDate = new Date(givenDateString);
+              console.log(data[i])
+
               const currentDate = new Date();
-              if (givenDate <= currentDate) {
+              const elementDate = new Date(data[i].date);
+              const elementTimeParts = data[i].time.split('-');
+              const elementEndTime = new Date(elementDate.toDateString() + ' ' + elementTimeParts[1]);
+
+
+
+              if (elementEndTime <= currentDate) {
                   data[i].patientId = ""
               }
               if (data[i].time == time) {
